@@ -1,4 +1,3 @@
-
 // map
 const myMap = {
     coordinates: [],
@@ -29,16 +28,29 @@ const myMap = {
 
 
     },
+    _addMarkers: function (arr) {
+        var locations = [
+            ["Restaurants", 41.607471, -90.5999839],
+            ["Coffee Shops", 1.3066948, 103.8003488],
+            ["Movies", 44.039658, -92.4644389],
+            ["Gas Stations", 35.0080405, -79.1725965]
+        ];
 
-    addMarkers(arr){
-        //loop throught the businesses and add markers
-
-    }
-
-
-
-
-}
+        //loop through the businesses and add markers
+        for (var i = 0; i < locations.length; i++) {
+            var location = locations[i];
+            var marker = L.marker([location[1], location[2]]).addTo(map);
+            marker.bindPopup(location[0]);
+        }
+    },
+    get addMarkers() {
+        return this._addMarkers;
+    },
+    set addMarkers(value) {
+        this._addMarkers = value;
+    },
+    };
+   
 
 //getting coordinates via geolocation api
 async function getCoords() {
@@ -61,7 +73,7 @@ window.onload = async () => {
 //business submit button
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault()
-    let business = document.getElementById('business').valueMax
+    let business = document.getElementById('business').value
     //fetch{
     //api.foursquare.com/v3/places/search?&query=${business}&limit=5{limit}&ll=${lat}%2C${lon}`},
     myMap.addMarkers(arr)
