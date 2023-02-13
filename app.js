@@ -1,48 +1,49 @@
+
 // map
 const myMap = {
     coordinates: [],
     businesses: [],
     map: {},
     markers: {},
-}
 
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
 
-// Leaflet Map
-buildMap() {
-    this.map = L.map('map', {
-     center: this.coordinates,
-        zoom: 11,
-    })
+    // Leaflet Map
+    buildMap() {
+        this.map = L.map('map', {
+            center: this.coordinates,
+            zoom: 14,
+        })
+        console.log(this.map)
+        // Add openstreetmap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
-// Add openstreetmap tiles
-L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-}).addTo(map);
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(this.map);
 
-       
+        // Create and add a geolocation marker
+        const marker = L.marker(this.coordinates)
+        marker
+            .addTo(this.map)
+            .bindPopup('<p1><b>Here we are!</b><br></p1>')
+            .openPopup()
 
-// Create and add a geolocation marker
-const marker = L.marker(this.coordinates)
-marker
-.addTo(this.map)
-.bindPopup('<p1><b>Here we are!</b><br></p1>')
-.openPopup()
 
-fetch{
-    //api.foursquare.com/v3/places/search?&query=${business}&limit=5{limit}&ll=${lat}%2C${lon}`
-},
+    },
+
+    addMarkers(arr){
+        //loop throught the businesses and add markers
+
+    }
+
+
+
 
 }
 
 //getting coordinates via geolocation api
-async function getCoords(){
-    const pos = await new Promise ((resolve, reject) =>{
-        navigator.geolocation.getCurrentPosition(resolve,reject)
+async function getCoords() {
+    const pos = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject)
     });
     return [pos.coords.latitude, pos.coords.longitude]
 }
@@ -50,7 +51,7 @@ async function getCoords(){
 
 //event handlers
 // window load
-window.onload = async() => {
+window.onload = async () => {
     const coords = await getCoords()
     console.log(coords)
     myMap.coordinates = coords
@@ -61,7 +62,8 @@ window.onload = async() => {
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault()
     let business = document.getElementById('business').valueMax
-//
-console.log(business)
+    //fetch{
+    //api.foursquare.com/v3/places/search?&query=${business}&limit=5{limit}&ll=${lat}%2C${lon}`},
+    myMap.addMarkers(arr)
+    console.log(business)
 })
-
