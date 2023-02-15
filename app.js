@@ -1,3 +1,4 @@
+//myMap
 const myMap = {
     coordinates: [],
     businesses: [],
@@ -11,7 +12,7 @@ const myMap = {
             center: this.coordinates,
             zoom: 14,
         })
-        //console.log(this.map)
+       
         // Add openstreetmap tiles
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
@@ -27,14 +28,10 @@ const myMap = {
 
 
     },
-    addMarkers() { //Defining a function within an object you do not use the function keyword
-        //I am not sure what you are using this array for so I commented it out
-        // var locations = [
-        //     ["Restaurants", 41.607471, -90.5999839],
-        //     ["Coffee Shops", 1.3066948, 103.8003488],
-        //     ["Movies", 44.039658, -92.4644389],
-        //     ["Gas Stations", 35.0080405, -79.1725965]
-        // ];
+
+    // Adding Markers
+
+    addMarkers() { 
 
         //loop through the businesses and add markers
         for (var i = 0; i < this.businesses.length; i++) {
@@ -48,7 +45,8 @@ const myMap = {
 };
 
 
-//getting coordinates via geolocation api
+//Getting cords from the GEO
+
 async function getCoords() {
     const pos = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
@@ -57,8 +55,7 @@ async function getCoords() {
 }
 
 
-//event handlers
-// window load
+// Windows loading
 window.onload = async () => {
     const coords = await getCoords()
     //console.log(coords)
@@ -66,13 +63,13 @@ window.onload = async () => {
     myMap.buildMap()
 }
 
-//business submit button
+// Business submit Bttn
 document.getElementById('submit').addEventListener('click', async (event) => {
     event.preventDefault()
     let business = document.getElementById('business').value
 
-    //The code here was not complete so I finished it, please take a look and try to understand the code and send me any questions you have
-    //1. We need to fetch the data using the foursquare API, starting with setting the options for the fetch command
+    
+    // Using Get Method
     const options = {
         method: 'GET',
         headers: {
@@ -80,19 +77,21 @@ document.getElementById('submit').addEventListener('click', async (event) => {
             Authorization: 'fsq3ATzZbmcGhdeFafr73wZcnJ+LlN6bK+4dh19a7ClS4u8='
         }
     }
-    //Setting the limit to 4 businesses
+    //Businesses being set at the limit of 4
     let limit = 4
-    //Setting the coordinates using the myMap object coordinates
+
+
+    // Set the Coords from myMap 
     let lat = myMap.coordinates[0]
     let lon = myMap.coordinates[1]
 
-    //Using fetch to get the businesses data
+    //Fetch to gain access to the API
     let response = await fetch(`https://api.foursquare.com/v3/places/search?&query=${business}&limit=${limit}&ll=${lat}%2C${lon}`, options)
     let data = await response.text()
     let parsedData = JSON.parse(data)
 
 
-    //Here we are using the Array.map function to map the data we got into an array that we can assign to myMap object 
+    //Array.map function to myMap 
     let businesses = parsedData.results.map((element) => {
         let location = {
             name: element.name,
@@ -102,9 +101,8 @@ document.getElementById('submit').addEventListener('click', async (event) => {
         return location
     });
 
-    //Assigning the data to myMap.businesses, this will be used in the AddMarkers function to add the businesses to the map
+    // Adding Markers and Calling the map to the businesses
     myMap.businesses = businesses;
-    //Calling the addMarkets function, if you do not see the markers on the map zoom out and you should see them
     myMap.addMarkers();
 
 })
